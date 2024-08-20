@@ -107,7 +107,11 @@ func getEpisodesHandler(c *gin.Context) {
     }
 
     // Return Episodes
-    c.JSON(http.StatusOK, episodes)
+    // c.JSON(http.StatusOK, episodes)
+    c.JSON(http.StatusOK, gin.H{
+        "results": episodes,
+        "count": len(episodes),
+    })
 }
 
 // func searchHandler(w http.ResponseWriter, r *http.Request) {
