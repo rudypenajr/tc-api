@@ -6,6 +6,8 @@ services:
       - "80:80"
     depends_on:
       - api
+    volumes:
+      - ./frontend/build:/app/frontend/build
   api:
     build:
       context: ./backend
