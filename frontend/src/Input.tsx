@@ -1,10 +1,13 @@
+import React, { FC, useEffect, useState } from "react";
+
 import axios from "axios";
-import React, { FC, SetStateAction, useEffect, useState } from "react";
+
 import { Episode, SearchResponse } from "./types";
 
 export const Input: FC<{
+  hasResults: boolean;
   setData: React.Dispatch<React.SetStateAction<Episode[]>>;
-}> = ({ setData }) => {
+}> = ({ hasResults, setData }) => {
   const [query, setQuery] = useState<string>("");
   const [debouncedQuery, setDebouncedQuery] = useState(query);
   //   const [data, setData] = useState<Episode[]>([]);
@@ -33,10 +36,14 @@ export const Input: FC<{
   }, [debouncedQuery]);
 
   return (
-    <div>
+    <div
+    // className={`transform transition-transform duration-300 ${
+    //   hasResults ? "-translate-y-8" : "translate-y-0"
+    // }`}
+    >
       <label
         htmlFor="search"
-        className="block text-sm font-medium leading-6 text-gray-900"
+        className="text-sm font-medium leading-6 text-gray-900"
       >
         Search Time Crisis Wiki
       </label>
