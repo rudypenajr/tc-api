@@ -36,14 +36,11 @@ export const Input: FC<{
   }, [debouncedQuery]);
 
   return (
-    <div
-    // className={`transform transition-transform duration-300 ${
-    //   hasResults ? "-translate-y-8" : "translate-y-0"
-    // }`}
-    >
+    // flex flex-row items-end content-end
+    <div className="">
       <label
         htmlFor="search"
-        className="text-sm font-medium leading-6 text-gray-900"
+        className="text-base font-medium leading-6 text-gray-900 mr-5"
       >
         Search Time Crisis Wiki
       </label>

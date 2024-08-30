@@ -15,3 +15,22 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+
+@media (min-width: 1280px) {
+  .xl\:left-120 {
+    left: 30rem;
+  }
+
+  .xl\:ml-120 {
+    margin-left: 30rem;
+  }
+
+  .xl\:w-120 {
+    width: 30rem;
+  }
+
+  .xl\:px-12 {
+    padding-left: 3rem;
+    padding-right: 3rem;
+  }
+}

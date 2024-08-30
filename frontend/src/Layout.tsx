@@ -10,7 +10,11 @@ export const Layout: FC<{ children: ReactNode }> = ({ children }) => {
         <AboutComponent />
       </header>
 
-      {children}
+      <main className="border-t border-slate-200 lg:relative lg:mb-28 lg:ml-112 lg:border-t-0 xl:ml-120">
+        <div className="relative">
+          <div className="pb-12 pt-16 sm:pb-4 lg:pt-12">{children}</div>
+        </div>
+      </main>
     </div>
   );
 };
