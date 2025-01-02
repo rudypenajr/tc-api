@@ -39,19 +39,21 @@ function App() {
         </div>
       )}
 
-      <div className="lg:px-8">
-        <div className="lg:max-w-4xl">
-          <div className="mx-auto px-4 sm:px-6 md:max-w-2xl md:px-4 lg:px-0">
-            {/* inline-flex items-center gap-2 justify-center group w-full */}
-            <button className="mr-4 rounded-md py-2 px-3 text-sm outline-offset-2 transition active:transition-none bg-zinc-50 font-medium text-zinc-900 hover:bg-zinc-100 active:bg-zinc-100 active:text-zinc-900/60 dark:bg-zinc-800/50 dark:text-zinc-300 dark:hover:bg-zinc-800 dark:hover:text-zinc-50 dark:active:bg-zinc-800/50 dark:active:text-zinc-50/70 mt-6">
-              Next
-            </button>
-            <button className="rounded-md py-2 px-3 text-sm outline-offset-2 transition active:transition-none bg-zinc-50 font-medium text-zinc-900 hover:bg-zinc-100 active:bg-zinc-100 active:text-zinc-900/60 dark:bg-zinc-800/50 dark:text-zinc-300 dark:hover:bg-zinc-800 dark:hover:text-zinc-50 dark:active:bg-zinc-800/50 dark:active:text-zinc-50/70 mt-6 ">
-              Prev
-            </button>
+      {data.length > 0 && (
+        <div className="lg:px-8">
+          <div className="lg:max-w-4xl">
+            <div className="mx-auto px-4 sm:px-6 md:max-w-2xl md:px-4 lg:px-0">
+              {/* inline-flex items-center gap-2 justify-center group w-full */}
+              <button className="mr-4 rounded-md py-2 px-3 text-sm outline-offset-2 transition active:transition-none bg-zinc-50 font-medium text-zinc-900 hover:bg-zinc-100 active:bg-zinc-100 active:text-zinc-900/60 dark:bg-zinc-800/50 dark:text-zinc-300 dark:hover:bg-zinc-800 dark:hover:text-zinc-50 dark:active:bg-zinc-800/50 dark:active:text-zinc-50/70 mt-6">
+                Next
+              </button>
+              <button className="rounded-md py-2 px-3 text-sm outline-offset-2 transition active:transition-none bg-zinc-50 font-medium text-zinc-900 hover:bg-zinc-100 active:bg-zinc-100 active:text-zinc-900/60 dark:bg-zinc-800/50 dark:text-zinc-300 dark:hover:bg-zinc-800 dark:hover:text-zinc-50 dark:active:bg-zinc-800/50 dark:active:text-zinc-50/70 mt-6 ">
+                Prev
+              </button>
+            </div>
           </div>
         </div>
-      </div>
+      )}
     </Layout>
   );
 }
