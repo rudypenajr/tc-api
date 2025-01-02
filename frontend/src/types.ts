@@ -1,5 +1,3 @@
-import { GridColDef } from "@mui/x-data-grid";
-
 export type Episode = {
   date: string;
   episode_no: string;
