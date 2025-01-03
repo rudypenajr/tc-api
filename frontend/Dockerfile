@@ -26,10 +26,10 @@ RUN apk --no-cache add gettext
 COPY --from=builder /app/build /usr/share/nginx/html
 
 # Copy the NGINX configuration template
-COPY nginx.conf.template /etc/nginx/conf.d/default.conf.template
+COPY nginx.conf /etc/nginx/conf.d/default.conf
 
 # Use envsubst to replace variables in the NGINX configuration file at runtime
-CMD envsubst '$REACT_APP_API_URL' < /etc/nginx/conf.d/default.conf.template > /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'
+CMD envsubst '$REACT_APP_API_URL' < /etc/nginx/conf.d/default.conf > /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'
 
 # Expose port 80
 EXPOSE 80
