@@ -34,7 +34,7 @@ export const Input: FC<{
       console.log("Fetching results for:", debouncedQuery);
       // Assuming your API is running on localhost:8080
       axios
-        .get(`${INNER_API_URL}/search?q=${query}`) // .get(`http://localhost:8080/search?q=${query}`)
+        .get(`${API_URL}/search?q=${query}`) // .get(`http://localhost:8080/search?q=${query}`)
         .then((response) => setData((response.data as SearchResponse).results))
         .catch((error) => console.error("Error fetching data:", error));
     }
