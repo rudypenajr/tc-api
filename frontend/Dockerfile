@@ -1,5 +1,5 @@
-# Use a Node.js image
-FROM node:latest
+# Use a Node.js image for building
+FROM node:18-alpine as builder
 
 # Set the working directory
 WORKDIR /app
@@ -10,13 +10,26 @@ COPY package*.json ./
 # Install dependencies
 RUN npm install
 
-# Copy everything to the container
+# Copy all application files
 COPY . .
 
 # Build the React app
 RUN npm run build
 
-# Expose port
+# Use a lightweight server image for serving static files
+FROM node:18-alpine
+
+# Install `serve` globally
+RUN npm install -g serve
+
+# Set the working directory
+WORKDIR /app
+
+# Copy the build output from the builder stage
+COPY --from=builder /app/build ./build
+
+# Expose the port
 EXPOSE 3000
 
-CMD ["npm", "start"]
+# Serve the build directory using `serve`
+CMD ["serve", "-s", "build", "-l", "3000"]
