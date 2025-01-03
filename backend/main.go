@@ -73,8 +73,10 @@ func main() {
 func connect_to_mongodb() error {
     serverAPI := options.ServerAPI(options.ServerAPIVersion1)
     fmt.Println("Mongo URI: ", mongoURI)
+    
     opts := options.Client().ApplyURI(mongoURI).SetServerAPIOptions(serverAPI)
-
+    fmt.Println("Mongo OPTS: ", opts)
+    
     client, err := mongo.Connect(context.TODO(), opts)
     if err != nil {
         panic(err)
@@ -89,7 +91,7 @@ func connect_to_mongodb() error {
     var dbName = os.Getenv("MONGO_DB_NAME")
     var collectionName = os.Getenv("MONGO_COLLECTION")
     collection = mongoClient.Database(dbName).Collection(collectionName)
-
+    fmt.Printf("collection", collection)
     return err;
 }
 
