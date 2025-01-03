@@ -1,11 +1,6 @@
+// src/config.js
 const config = {
-  development: {
-    apiUrl: "http://localhost:8080",
-  },
-  production: {
-    apiUrl: "https://api.example.com",
-  },
+  apiUrl: window.env?.REACT_APP_API_URL || "http://localhost:8080",
 };
 
-const env = process.env.NODE_ENV || "development";
-export default config[env];
+export default config;
