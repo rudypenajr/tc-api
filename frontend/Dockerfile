@@ -1,21 +1,37 @@
 # NGINX
 # Build Stage
 FROM node:16-alpine AS builder
+
+# Set the working directory
 WORKDIR /app
-COPY package.json yarn.lock ./
-RUN yarn install
+
+# Copy the package.json and package-lock.json files
+COPY package.json package-lock.json ./
+
+# Install dependencies using npm
+RUN npm install
+
+# Copy the rest of the application files
 COPY . .
-RUN yarn build
+
+# Build the React app
+RUN npm run build
 
 # Serve Static Files
 FROM nginx:1.21-alpine
+
+# Copy the build output from the builder stage to the NGINX HTML directory
 COPY --from=builder /app/build /usr/share/nginx/html
 
-# Add Nginx Configuration for Runtime Variables
+# Add NGINX configuration to inject runtime environment variables
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
+# Expose the default HTTP port
 EXPOSE 80
+
+# Start NGINX
 CMD ["nginx", "-g", "daemon off;"]
+
 
 
 # # Use a Node.js image for building
