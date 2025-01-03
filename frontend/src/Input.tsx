@@ -13,7 +13,7 @@ export const Input: FC<{
   const [query, setQuery] = useState<string>("");
   const [debouncedQuery, setDebouncedQuery] = useState(query);
   //   const [data, setData] = useState<Episode[]>([]);
-  console.log("API_URL", config.API_URL);
+  console.log("API_URL", config.apiUrl);
 
   useEffect(() => {
     const handler = setTimeout(() => {
@@ -31,7 +31,7 @@ export const Input: FC<{
       console.log("Fetching results for:", debouncedQuery);
       // Assuming your API is running on localhost:8080
       axios
-        .get(`${config.API_URL}/search?q=${query}`) // .get(`http://localhost:8080/search?q=${query}`)
+        .get(`${config.apiUrl}/search?q=${query}`) // .get(`http://localhost:8080/search?q=${query}`)
         .then((response) => setData((response.data as SearchResponse).results))
         .catch((error) => console.error("Error fetching data:", error));
     }
