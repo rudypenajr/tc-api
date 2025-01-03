@@ -83,6 +83,7 @@ func connect_to_mongodb() error {
     }
     err = client.Ping(context.TODO(), nil)
     fmt.Print("error is on client.PING")
+    
     mongoClient = client
     if err != nil {
         return err

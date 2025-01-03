@@ -4,6 +4,8 @@ import axios from "axios";
 
 import { Episode, SearchResponse } from "./types";
 
+const API_URL = process.env.REACT_APP_API_URL;
+
 export const Input: FC<{
   hasResults: boolean;
   setData: React.Dispatch<React.SetStateAction<Episode[]>>;
@@ -28,7 +30,7 @@ export const Input: FC<{
       console.log("Fetching results for:", debouncedQuery);
       // Assuming your API is running on localhost:8080
       axios
-        .get(`/search?q=${query}`)
+        .get(`${API_URL}/search?q=${query}`) // .get(`http://localhost:8080/search?q=${query}`)
         .then((response) => setData((response.data as SearchResponse).results))
         .catch((error) => console.error("Error fetching data:", error));
     }
