@@ -91,7 +91,7 @@ func connect_to_mongodb() error {
     var dbName = os.Getenv("MONGO_DB_NAME")
     var collectionName = os.Getenv("MONGO_COLLECTION")
     collection = mongoClient.Database(dbName).Collection(collectionName)
-    fmt.Printf("collection", collection)
+    fmt.Print("collection", collection)
     return err;
 }
 
