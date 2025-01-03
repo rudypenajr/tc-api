@@ -149,6 +149,7 @@ func searchHandler(c *gin.Context) {
     // }
 
       // Construct the aggregation pipeline with pagination
+    // Relies on Atlas Search
     pipeline := mongo.Pipeline{
         {{"$search", bson.D{
             {"index", "default"},
@@ -160,6 +161,10 @@ func searchHandler(c *gin.Context) {
         {{"$skip", skip}},
         {{"$limit", limit}},
     }
+
+    // fmt.Print(filter)
+    // fmt.Print("############")
+    // fmt.Print(pipeline)
 
     // findOptions := options.Find()
     // if limit > 0 {
