@@ -4,7 +4,7 @@ import axios from "axios";
 
 import { Episode, SearchResponse } from "./types";
 
-const API_URL = process.env.REACT_APP_API_URL;
+import config from "./config";
 
 export const Input: FC<{
   hasResults: boolean;
@@ -13,10 +13,7 @@ export const Input: FC<{
   const [query, setQuery] = useState<string>("");
   const [debouncedQuery, setDebouncedQuery] = useState(query);
   //   const [data, setData] = useState<Episode[]>([]);
-  const INNER_API_URL = process.env.REACT_APP_API_URL;
-
-  console.log("API_URL", API_URL);
-  console.log("INNER_API_URL", INNER_API_URL);
+  console.log("API_URL", config.API_URL);
 
   useEffect(() => {
     const handler = setTimeout(() => {
@@ -34,7 +31,7 @@ export const Input: FC<{
       console.log("Fetching results for:", debouncedQuery);
       // Assuming your API is running on localhost:8080
       axios
-        .get(`${API_URL}/search?q=${query}`) // .get(`http://localhost:8080/search?q=${query}`)
+        .get(`${config.API_URL}/search?q=${query}`) // .get(`http://localhost:8080/search?q=${query}`)
         .then((response) => setData((response.data as SearchResponse).results))
         .catch((error) => console.error("Error fetching data:", error));
     }
