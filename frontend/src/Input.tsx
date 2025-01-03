@@ -13,6 +13,10 @@ export const Input: FC<{
   const [query, setQuery] = useState<string>("");
   const [debouncedQuery, setDebouncedQuery] = useState(query);
   //   const [data, setData] = useState<Episode[]>([]);
+  const INNER_API_URL = process.env.REACT_APP_API_URL;
+
+  console.log("API_URL", API_URL);
+  console.log("INNER_API_URL", INNER_API_URL);
 
   useEffect(() => {
     const handler = setTimeout(() => {
