@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -71,6 +72,7 @@ func main() {
 // Our implementation logic for connecting to MongoDB
 func connect_to_mongodb() error {
     serverAPI := options.ServerAPI(options.ServerAPIVersion1)
+    fmt.Println("Mongo URI: ", mongoURI)
     opts := options.Client().ApplyURI(mongoURI).SetServerAPIOptions(serverAPI)
 
     client, err := mongo.Connect(context.TODO(), opts)

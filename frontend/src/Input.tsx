@@ -28,7 +28,7 @@ export const Input: FC<{
       console.log("Fetching results for:", debouncedQuery);
       // Assuming your API is running on localhost:8080
       axios
-        .get(`http://localhost:8080/search?q=${query}`)
+        .get(`/search?q=${query}`)
         .then((response) => setData((response.data as SearchResponse).results))
         .catch((error) => console.error("Error fetching data:", error));
     }
