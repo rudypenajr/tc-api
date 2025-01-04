@@ -6,9 +6,14 @@ import Input from "./Input";
 import "./App.css";
 import Article from "./components/article/Article";
 import Layout from "./Layout";
+import NoResults from "./components/actions/NoResults";
+import SpinningBrickLoader from "./components/actions/SpinningBrickLoader";
 
 function App() {
   const [data, setData] = useState<Episode[]>([]);
+  const [query, setQuery] = useState<string>("");
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [noResults, setNoResults] = useState<boolean>(false);
 
   return (
     <Layout>
@@ -16,10 +21,20 @@ function App() {
         <div className="lg:max-w-4xl">
           {/* mx-auto */}
           <div className="mx-auto px-4 sm:px-6 md:max-w-2xl md:px-4 lg:px-0">
-            <Input hasResults={data.length > 0} setData={setData} />
+            <Input
+              hasResults={data.length > 0}
+              setData={setData}
+              query={query}
+              setQuery={setQuery}
+              setIsLoading={setIsLoading}
+              setNoResults={setNoResults}
+            />
           </div>
         </div>
       </div>
+
+      {isLoading && <SpinningBrickLoader />}
+      {query.length > 0 && data.length === 0 && <NoResults query={query} />}
 
       {data.length > 0 && (
         <div className="divide-y divide-slate-100 sm:mt-4 lg:mt-8 lg:border-t lg:border-slate-100">

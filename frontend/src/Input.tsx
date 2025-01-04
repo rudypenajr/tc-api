@@ -9,11 +9,12 @@ import config from "./config";
 export const Input: FC<{
   hasResults: boolean;
   setData: React.Dispatch<React.SetStateAction<Episode[]>>;
-}> = ({ hasResults, setData }) => {
-  const [query, setQuery] = useState<string>("");
+  query: string;
+  setQuery: React.Dispatch<React.SetStateAction<string>>;
+  setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
+  setNoResults: React.Dispatch<React.SetStateAction<boolean>>;
+}> = ({ hasResults, setData, query, setQuery, setIsLoading, setNoResults }) => {
   const [debouncedQuery, setDebouncedQuery] = useState(query);
-  //   const [data, setData] = useState<Episode[]>([]);
-  console.log("API_URL", config.apiUrl);
 
   useEffect(() => {
     const handler = setTimeout(() => {
@@ -27,13 +28,24 @@ export const Input: FC<{
 
   useEffect(() => {
     if (debouncedQuery) {
+      setIsLoading(true);
       // Replace with your API call logic
-      console.log("Fetching results for:", debouncedQuery);
+      // console.log("Fetching results for:", debouncedQuery);
       // Assuming your API is running on localhost:8080
       axios
         .get(`${config.apiUrl}/search?q=${query}`) // .get(`http://localhost:8080/search?q=${query}`)
-        .then((response) => setData((response.data as SearchResponse).results))
-        .catch((error) => console.error("Error fetching data:", error));
+        .then((response) => {
+          setIsLoading(false);
+          setNoResults(false);
+          setData((response.data as SearchResponse).results);
+        })
+        .catch((error) => {
+          // Current API in GO retuns 404 when MongoDB has no results.
+          console.error("Error fetching data:", error);
+          setIsLoading(false);
+          setNoResults(true);
+          setData([]);
+        });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debouncedQuery]);
