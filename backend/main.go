@@ -148,19 +148,61 @@ func searchHandler(c *gin.Context) {
     //     "$text": bson.M{"$search": query},
     // }
 
-      // Construct the aggregation pipeline with pagination
+    // Construct the aggregation pipeline with pagination
     // Relies on Atlas Search
+    // pipeline := mongo.Pipeline{
+    //     {{"$search", bson.D{
+    //         {"index", "default"},
+    //         {"compound", bson.D{
+    //             {"should", bson.A{
+    //                 bson.D{
+    //                     {"text", bson.D{
+    //                         {"query", query},
+    //                         {"path", bson.M{"wildcard": "*"}},
+    //                     }},
+    //                 },
+    //             }},
+    //             {"sort", bson.A{
+    //                 bson.D{
+    //                     {"Timestamp", 1}, // 1 for ascending, -1 for descending
+    //                 },
+    //             }},
+    //         }},
+    //     }}},
+    //     {{"$skip", skip}},
+    //     {{"$limit", limit}},
+    // }
+
     pipeline := mongo.Pipeline{
-        {{"$search", bson.D{
-            {"index", "default"},
-            {"text", bson.D{
-                {"query", query},
-                {"path", bson.M{"wildcard": "*"}},
-            }},
-        }}},
-        {{"$skip", skip}},
-        {{"$limit", limit}},
-    }
+    // Search Stage
+    {{"$search", bson.D{
+        {"index", "default"},
+        {"text", bson.D{
+            {"query", query},
+            {"path", bson.M{"wildcard": "*"}},
+        }},
+    }}},
+
+    // Sorting Stage NOT WORKING
+    {{"$sort", bson.D{{"Timestamp", -1}}}}, // 1 for ascending, -1 for descending
+
+    // Pagination Stage
+    {{"$skip", skip}},
+    {{"$limit", limit}},
+}
+
+
+    // pipeline := mongo.Pipeline{
+    //     {{"$search", bson.D{
+    //         {"index", "default"},
+    //         {"text", bson.D{
+    //             {"query", query},
+    //             {"path", bson.M{"wildcard": "*"}},
+    //         }},
+    //     }}},
+    //     {{"$skip", skip}},
+    //     {{"$limit", limit}},
+    // }
 
     // fmt.Print(filter)
     // fmt.Print("############")
