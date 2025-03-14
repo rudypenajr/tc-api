@@ -9,18 +9,22 @@ import (
 	"strconv"
 
 	"github.com/gin-gonic/gin"
+	"github.com/rudypenajr/tc-api/modules/chat"
+	"github.com/sashabaranov/go-openai"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
+// Global MongoDB & OpenAI clients
+var client *mongo.Client
+var collection *mongo.Collection
+var openaiClient *openai.Client
 // Your MongoDB Atlas Connection String
 var mongoURI = os.Getenv("MONGO_URI")
-
 // A global variable that will hold a reference to the MongoDB client
 var mongoClient *mongo.Client
 
-var collection *mongo.Collection
 
 func init() {
     if err := connect_to_mongodb(); err != nil {
@@ -29,27 +33,6 @@ func init() {
 }
 
 func main() {
-    // serverAPI := options.ServerAPI(options.ServerAPIVersion1)
-    // opts := options.Client().ApplyURI("mongodb+srv://rudypenajr:<password>@cluster0.6ay7bhy.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0").SetServerAPIOptions(serverAPI)
-
-	// mongoURI := os.Getenv("MONGO_URI")
-    // Set up MongoDB connection
-    // client, err := mongo.NewClient(options.Client().ApplyURI(mongoURI))
-    // if err != nil {
-    //     log.Fatal(err)
-    // }
-    // ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-    // defer cancel()
-    // err = client.Connect(ctx)
-    // if err != nil {
-    //     log.Fatal(err)
-    // }
-    // defer client.Disconnect(ctx)
-
-    // var dbName = os.Getenv("MONGO_DB_NAME")
-    // var collectionName = os.Getenv("MONGO_COLLECTION")
-    // collection = mongoClient.Database(dbName).Collection(collectionName)
-
     // Set up Gin
     r := gin.Default()
 
@@ -59,11 +42,14 @@ func main() {
         })
     })
 
-
     // Define endpoints
     r.GET("/episodes", getEpisodesHandler)
     r.GET("/search", searchHandler)
-    // http.HandleFunc("/search", searchHandler)
+    
+
+    // Initialize Chat Service
+    chatService := chat.NewChatService(collection, openaiClient)
+    r.POST("/ask", chatService.HandleAsk) // Register chat module handler
 
     // Start server
     r.Run(":8080")
