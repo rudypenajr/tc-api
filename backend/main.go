@@ -9,12 +9,26 @@ import (
 	"strconv"
 
 	"github.com/gin-gonic/gin"
+	"github.com/joho/godotenv"
 	"github.com/rudypenajr/tc-api/modules/chat"
 	"github.com/sashabaranov/go-openai"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
+
+// type Episode struct {
+// 	ID                 string              `bson:"_id,omitempty"`
+// 	Url                string              `bson:"url,omitempty"`
+// 	Title              string              `bson:"title,omitempty"`
+// 	EpisodeNo          string              `bson:"episode_no,omitempty"`
+// 	Date               string              `bson:"date,omitempty"`  // Original format (e.g., "November 15, 2015")
+// 	Timestamp          primitive.DateTime  `bson:"timestamp"`  // ISO 8601 date format
+// 	Guests             []string            `bson:"guests,omitempty"`
+// 	Top5ComparisonYear string              `bson:"top_5_comparison_year,omitempty"`
+// 	Notes              string              `bson:"notes,omitempty"`
+// 	Embedding          []float32           `bson:"embedding,omitempty"`
+// }
 
 // Global MongoDB & OpenAI clients
 var client *mongo.Client
@@ -33,6 +47,24 @@ func init() {
 }
 
 func main() {
+    // Load .env variables
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatal("❌ Error loading .env file")
+	}
+
+	// Ensure OpenAI API key is set
+	openaiKey := os.Getenv("OPENAI_API_KEY")
+	if openaiKey == "" {
+		log.Fatal("❌ OPENAI_API_KEY is not set in .env")
+	}
+
+	// Initialize OpenAI client
+	openaiClient = openai.NewClient(openaiKey)
+
+    // Initialize Chat Service
+	chatService := chat.NewChatService(collection, openaiClient)
+    
     // Set up Gin
     r := gin.Default()
 
@@ -42,17 +74,43 @@ func main() {
         })
     })
 
-    // Define endpoints
-    r.GET("/episodes", getEpisodesHandler)
-    r.GET("/search", searchHandler)
-    
+    // Standard MongoDB text search (regular Atlas Search)
+	r.POST("/search", searchHandler)
 
-    // Initialize Chat Service
-    chatService := chat.NewChatService(collection, openaiClient)
-    r.POST("/ask", chatService.HandleAsk) // Register chat module handler
+	// Chatbot vector search (for LLM-based queries) - Uses chat.go methods
+	r.POST("/search-chat", func(c *gin.Context) {
+		var request struct {
+			Query string `json:"query"`
+		}
 
-    // Start server
-    r.Run(":8080")
+		if err := c.ShouldBindJSON(&request); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request"})
+			return
+		}
+
+		// Use `chat.go` to generate embeddings
+		queryVector, err := chatService.GenerateEmbedding(request.Query)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to generate embedding"})
+			return
+		}
+
+		// Use `chat.go` to search MongoDB
+		results, err := chatService.SearchMongoDB(queryVector)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to search database"})
+			return
+		}
+
+		c.JSON(http.StatusOK, gin.H{"results": results})
+	})
+
+	// Register `/ask` for OpenAI chat
+	r.POST("/ask", chatService.HandleAsk)
+
+	// Start the API
+	fmt.Println("🚀 API is running on port 8080...")
+	r.Run(":8080")
 }
 
 // Our implementation logic for connecting to MongoDB
@@ -160,22 +218,22 @@ func searchHandler(c *gin.Context) {
     // }
 
     pipeline := mongo.Pipeline{
-    // Search Stage
-    {{"$search", bson.D{
-        {"index", "default"},
-        {"text", bson.D{
-            {"query", query},
-            {"path", bson.M{"wildcard": "*"}},
-        }},
-    }}},
+        // Search Stage
+        {{"$search", bson.D{
+            {"index", "default"},
+            {"text", bson.D{
+                {"query", query},
+                {"path", bson.M{"wildcard": "*"}},
+            }},
+        }}},
 
-    // Sorting Stage NOT WORKING
-    {{"$sort", bson.D{{"Timestamp", -1}}}}, // 1 for ascending, -1 for descending
+        // Sorting Stage NOT WORKING
+        {{"$sort", bson.D{{"Timestamp", -1}}}}, // 1 for ascending, -1 for descending
 
-    // Pagination Stage
-    {{"$skip", skip}},
-    {{"$limit", limit}},
-}
+        // Pagination Stage
+        {{"$skip", skip}},
+        {{"$limit", limit}},
+    }
 
 
     // pipeline := mongo.Pipeline{

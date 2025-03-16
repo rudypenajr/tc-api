@@ -18,6 +18,7 @@ services:
       - MONGO_URI=${MONGO_URI}
       - MONGO_DB_NAME=${MONGO_DB_NAME}
       - MONGO_COLLECTION=${MONGO_COLLECTION}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
   frontend:
     build:
       context: ./frontend
