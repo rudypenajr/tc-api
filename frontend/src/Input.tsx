@@ -32,8 +32,14 @@ export const Input: FC<{
       // Replace with your API call logic
       // console.log("Fetching results for:", debouncedQuery);
       // Assuming your API is running on localhost:8080
+
+      // We were using /search before introduction of vector based search.
+      // .get(`${config.apiUrl}/search?q=${query}`) // .get(`http://localhost:8080/search?q=${query}`)
+
       axios
-        .get(`${config.apiUrl}/search?q=${query}`) // .get(`http://localhost:8080/search?q=${query}`)
+        .post(`${config.apiUrl}/search-chat}`, {
+          q: query,
+        })
         .then((response) => {
           setIsLoading(false);
           setNoResults(false);
