@@ -9,7 +9,6 @@ import (
 	"strconv"
 
 	"github.com/gin-gonic/gin"
-	"github.com/joho/godotenv"
 	"github.com/rudypenajr/tc-api/modules/chat"
 	"github.com/sashabaranov/go-openai"
 	"go.mongodb.org/mongo-driver/bson"
@@ -48,10 +47,10 @@ func init() {
 
 func main() {
     // Load .env variables
-	err := godotenv.Load()
-	if err != nil {
-		log.Fatal("❌ Error loading .env file")
-	}
+	// err := godotenv.Load()
+	// if err != nil {
+	// 	log.Fatal("❌ Error loading .env file")
+	// }
 
 	// Ensure OpenAI API key is set
 	openaiKey := os.Getenv("OPENAI_API_KEY")
