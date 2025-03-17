@@ -74,7 +74,7 @@ func main() {
     })
 
     // Standard MongoDB text search (regular Atlas Search)
-	r.POST("/search", searchHandler)
+	r.GET("/search", searchHandler)
 
 	// Chatbot vector search (for LLM-based queries) - Uses chat.go methods
 	r.POST("/search-chat", func(c *gin.Context) {
