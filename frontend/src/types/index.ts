@@ -14,3 +14,10 @@ export type SearchResponse = {
   page: number;
   results: Episode[];
 };
+
+export type MessageRole = "user" | "assistant";
+
+export interface Message {
+  role: MessageRole;
+  content: string;
+}
