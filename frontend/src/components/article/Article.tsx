@@ -2,6 +2,7 @@ import { FC } from "react";
 import { Episode } from "../../types";
 import Group from "./Group";
 import Top5 from "./Top5";
+import AIAskIcon from "./AIAskIcon";
 
 export const Article: FC<Episode> = ({
   _id,
@@ -19,18 +20,22 @@ export const Article: FC<Episode> = ({
         <div className="lg:max-w-4xl">
           <div className="mx-auto px-4 sm:px-6 md:max-w-2xl md:px-4 lg:px-0">
             <div className="flex flex-col items-start">
-              <h2
-                id="episode-5-title"
-                className="mt-2 text-lg font-bold text-slate-900 decoration-pink-500"
-              >
-                <a
-                  title={`Link to Episode ${episode_no}, titled ${title}`}
-                  href={`${url}`}
-                  className="decoration-pink-500"
+              <div className="flex flex-row items-center justify-between w-full">
+                <h2
+                  id="episode-5-title"
+                  className="mt-2 text-lg font-bold text-slate-900 decoration-pink-500"
                 >
-                  Episode {episode_no}: {title}
-                </a>
-              </h2>
+                  <a
+                    title={`Link to Episode ${episode_no}, titled ${title}`}
+                    href={`${url}`}
+                    className="decoration-pink-500"
+                  >
+                    Episode {episode_no}: {title}
+                  </a>
+                </h2>
+
+                <AIAskIcon />
+              </div>
 
               <time
                 dateTime={date}
