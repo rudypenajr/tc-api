@@ -37,7 +37,7 @@ export const Input: FC<{
       // .get(`${config.apiUrl}/search?q=${query}`) // .get(`http://localhost:8080/search?q=${query}`)
 
       axios
-        .post(`${config.apiUrl}/search-chat}`, {
+        .post(`${config.apiUrl}/search-chat`, {
           query: query,
         })
         .then((response) => {

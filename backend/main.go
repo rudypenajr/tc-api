@@ -8,6 +8,7 @@ import (
 	"os"
 	"strconv"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/rudypenajr/tc-api/modules/chat"
 	"github.com/sashabaranov/go-openai"
@@ -66,6 +67,14 @@ func main() {
     
     // Set up Gin
     r := gin.Default()
+
+    // 🔹 Allow CORS for your frontend
+    r.Use(cors.New(cors.Config{
+        AllowOrigins:     []string{"http://localhost:3000"}, // Allow UI
+        AllowMethods:     []string{"GET", "POST", "OPTIONS"},
+        AllowHeaders:     []string{"Content-Type", "Authorization"},
+        AllowCredentials: true,
+    }))
 
     r.GET("/", func(c *gin.Context) {
         c.JSON(200, gin.H{
