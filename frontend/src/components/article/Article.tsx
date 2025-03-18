@@ -13,7 +13,20 @@ export const Article: FC<Episode> = ({
   episode_no,
   guests,
   top_5_comparison_year,
+  formatted_date,
 }) => {
+  const episode = {
+    _id,
+    title,
+    date,
+    notes,
+    url,
+    episode_no,
+    guests,
+    top_5_comparison_year,
+    formatted_date,
+  } as Episode;
+
   return (
     <article key={_id} className={`py-10 sm:py-12`}>
       <div className="lg:px-8">
@@ -34,7 +47,7 @@ export const Article: FC<Episode> = ({
                   </a>
                 </h2>
 
-                <AIAskIcon />
+                <AIAskIcon episode={episode} />
               </div>
 
               <time

@@ -1,11 +1,53 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import axios from "axios";
-import { Message } from "../types"; // Import message types
+import { Episode, Message } from "../types";
+// import { useState } from "react";
+// import axios from "axios";
+// import { Message } from "../types"; // Import message types
+
+import config from "../config";
 
 export default function ChatPage() {
-  const [messages, setMessages] = useState<Message[]>([]); // Define array of messages
+  // const [messages, setMessages] = useState<Message[]>([]); // Define array of messages
+  // const [input, setInput] = useState<string>("");
+  // const [loading, setLoading] = useState<boolean>(false);
+  const location = useLocation();
+  const episode = location.state?.episode as Episode | null; // Retrieve passed episode
+  const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
+
+  // 🔹 When the page loads, automatically start the conversation
+  useEffect(() => {
+    if (episode) {
+      const date = episode.formatted_date
+        ? episode.formatted_date
+        : episode.date;
+
+      const initialMessage: Message = {
+        role: "assistant",
+        content: `
+          Welcome! You’re exploring the episode **"${
+            episode.title
+          }"**, which aired on **${date}**.  
+
+          **Episode Details:**  
+          - **Guests:** ${
+            episode.guests?.join(", ") || "No guest info available"
+          }  
+          - **Top 5 Comparison Year:** ${
+            episode.top_5_comparison_year || "Not available"
+          }  
+          - **Notes:** ${episode.notes || "No additional notes provided."}  
+
+          I can help summarize this episode, provide insights, or answer specific questions!  
+          What would you like to know? 🎙️  
+        `,
+      };
+      setMessages([initialMessage]);
+    }
+  }, [episode]);
 
   const handleSendMessage = async () => {
     if (!input.trim()) return;
@@ -16,9 +58,12 @@ export default function ChatPage() {
     setLoading(true);
 
     try {
-      const response = await axios.post<{ response: string }>("/api/ask", {
-        query: input,
-      });
+      const response = await axios.post<{ response: string }>(
+        `${config.apiUrl}/ask`,
+        {
+          query: input,
+        }
+      );
 
       // Create AI response message
       const aiMessage: Message = {

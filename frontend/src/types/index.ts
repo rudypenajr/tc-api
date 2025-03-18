@@ -7,6 +7,7 @@ export type Episode = {
   top_5_comparison_year: string;
   url: string;
   _id: string;
+  formatted_date?: string;
 };
 
 export type SearchResponse = {

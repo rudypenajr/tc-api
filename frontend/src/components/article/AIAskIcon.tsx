@@ -1,11 +1,30 @@
-import React from "react";
+import React, { FC } from "react";
 
-const AIAskIcon = () => {
+import { Link } from "react-router-dom";
+
+import { Episode } from "../../types";
+
+// 🔹 Define the correct props structure
+interface AIAskIconProps {
+  episode: Episode;
+}
+
+export const AIAskIcon: FC<AIAskIconProps> = ({ episode }) => {
   return (
     <div className="inline-flex items-center py-1 px-2 rounded-md font-medium bg-purple-600 text-white text-xs">
+      <div key={episode._id} className="episode-card"></div>
+      {/* 
       <a
         title="Explore topic with AI guide"
         href="/ask"
+        className="inline-flex items-center"
+      > 
+       */}
+
+      <Link
+        to={{ pathname: "/ask" }}
+        state={{ episode } as { episode: Episode }}
+        title="Explore topic with AI guide"
         className="inline-flex items-center"
       >
         <svg
@@ -27,7 +46,8 @@ const AIAskIcon = () => {
           <path d="M5 18H3"></path>
         </svg>
         <span>Explore topic with AI guide</span>
-      </a>
+        {/* </a> */}
+      </Link>
     </div>
   );
 };
